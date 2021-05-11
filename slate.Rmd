@@ -1,0 +1,85 @@
+---
+title: "SlateX"
+subtitle: "A Subscription Platform for R and Python Creators"
+author: "Jonathan Regenstein"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA, fig.height = 6)
+options(htmltools.dir.version = FALSE)
+
+library(tidyverse)
+library(tidyquant)
+
+```
+
+
+# SlateX
+
++ What is it? 
++ Why now? 
++ Why us? 
+
+---
+
+# Long Term Trends
+
++ Coders will rule the ~~day~~ decade
++ Population of R and Python coders growing fast
++ Data ubiquitous
++ Decentralization > Big Institutions
++ Explosion in assets and quant fields
+
+---
+
+# Revenue: 3 Year Plan
+
++ 1000 creators * 1000 subscribers each * $10 per month == $24mm ARR
+
+```{r, echo = F}
+
+
+tibble(
+  creators = c(10, 100, 500, 1000, 2000),
+  subscribers = c(100, 200, 500, 1000, 1000),
+  revenue = creators * subscribers * 10 * 12 * .2,
+  time = c("Alpha", "Beta", "Years 1-2", "Year 3", "Years 4-5")
+) %>% 
+  ggplot(aes(x = as.factor(creators), y = revenue, text = time)) + 
+  geom_col(fill = "steelblue", width = .5) +
+  ggrepel::geom_label_repel(aes(label = time), nudge_y = 50, direction = "y") +
+  scale_y_continuous(label = scales::dollar) +
+  labs(title = "Revenue Model", x = "Creators", y = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = .5))
+  
+```
+
+---
+
+# Features
+
++ Ease of publishing
++ Integrate with twitter and linkedin
++ Flow to blog and website and email drips
++ All on top of Rmarkdown
++ How diff from Substack?
+
+---
+
+# Challenges
+
++ Finding 1000 creators
++ Consistency
++ Long term thinking
+
+---
+

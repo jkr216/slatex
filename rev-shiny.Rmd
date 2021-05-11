@@ -1,0 +1,100 @@
+---
+title: "Untitled"
+runtime: shiny
+output:
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    source_code: embed
+---
+
+
+```{r setup, message = FALSE}
+
+library(tidyquant)
+library(tidyverse)
+library(timetk)
+library(broom)
+library(plotly)
+library(scales)
+library(readr)
+
+knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+
+
+```
+
+
+Sidebar {.sidebar}
+=====================================
+  
+```{r}
+
+numericInput("coders", "Coders:", 100,
+             min = 1, max = 10000)
+
+numericInput("subscribers", "Subs:", 100,
+             min = 1, max = 1000)
+
+numericInput("price", "Price:", 10,
+             min = 1, max = 10000)
+
+numericInput("coders_growth_rate", "coder growth rate:", .3,
+             min = 0, max = 5)
+
+numericInput("subs_growth_rate", "subs growth rate:", .3,
+             min = 0, max = 5)
+
+numericInput("percent_rev", "rev forco", .3,
+             min = 0, max = 5)
+
+
+actionButton("go", "Submit")
+```
+
+```{r}
+revenue_model <- reactive({
+  
+  revenue <- (input$coders * input$subscribers * input$price * 12) * input$percent_rev
+  
+  
+coders_growth_rate <- input$coders_growth_rate
+subs_growth_rate <- input$subs_growth_rate # percent
+
+tibble(year = seq(1, 10, by = 1) %>% as.factor(),
+       coders = rep(input$coders, 10),
+       subscribers = rep(input$subscribers, 10)) %>%
+  mutate(
+         coders = accumulate(coders, ~ .x * (1 + coders_growth_rate)),
+         subscribers  = accumulate(subscribers, ~ .x * (1 + subs_growth_rate)),
+         revenue = coders * subscribers * input$price * 12 * .1)
+  
+})
+```
+
+
+Model
+=====================================
+
+Row 1 {.tabset}
+---------------------
+
+### Growth
+
+```{r}
+renderPlotly({
+  (
+  revenue_model() %>% 
+  ggplot(aes(x =  year, y = revenue, text = str_glue("coders: {coders}
+                                                        subs per: {subscribers}"))) + 
+    geom_col(fill = "steelblue", width = .5) +
+    
+    scale_y_continuous(labels = dollar, breaks = pretty_breaks( n = 10)) +
+    theme_minimal() 
+  ) %>% 
+    ggplotly(tooltip = "text")
+})
+```
+
+
+
+
