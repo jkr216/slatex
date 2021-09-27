@@ -1,0 +1,204 @@
+---
+title: "SlateX"
+author: "Jonathan Regenstein"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+subtitle: A Subscription Platform for R and Python Creators
+---
+
+
+
+```{r setup, include = FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA, fig.height = 4)
+options(htmltools.dir.version = FALSE)
+
+library(tidyverse)
+library(tidyquant)
+
+```
+
+<style>
+div.footnotes {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 10px;
+  width: 80%;
+  font-size: 0.6em;
+}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('slide:not(.backdrop):not(.title-slide)').append('<div class=\"footnotes\">');
+
+    $('footnote').each(function(index) {
+      var text  = $(this).html();
+      var fnNum = (index+1).toString().sup();
+      $(this).html(text + fnNum);
+
+      var footnote   = fnNum + ': ' + $(this).attr('content') + '<br/>';
+      var oldContent = $(this).parents('slide').children('div.footnotes').html();
+      var newContent = oldContent + footnote;
+      $(this).parents('slide').children('div.footnotes').html(newContent);
+    });
+  });
+</script>
+
+
+## SlateX
+
+- What is it? 
+- Why now?
+
+## What is it?
+
+- Tech Stack (updated: quarto and ghost)
+- Quality Control  +  Payment Mechanisms
+- Community
+
+## Creator Economy
+
+- Stripe
+- "ultimately, as we think about the internet economy ...one of the big bets for us is on the creator economy" <footnote content=https://www.businessinsider.com/fintech-giant-stripe-is-betting-big-on-the-creator-economy-2021-5>
+- a16z
+- "There are thousands of experts, creators, and practitioners around the world who have valuable knowledge to share ... this is the best way for creators to monetize"<footnote content=https://www.protocol.com/maven-a16z-edtech-creator-economy">
+
+## Creator Economy
+- Point 72
+- "[T]he creator economy...feels like it's turning into the new small business,...There are emerging employment trends going on..."<footnote content=https://www.businessinsider.com/point72-ventures-fintech-gig-creator-economies-social-media-influencer-2021-6>
+- HBR "The Creator Economy Needs a Middle Class"
+- "Subscription...can enable creators with even modest audience sizes to earn substantial amounts. These direct fan payment models facilitate greater monetization..."<footnote content=https://hbr.org/2020/12/the-creator-economy-needs-a-middle-class>
+
+## Other Trends
+
+- "No niche is too small if it's yours" - Seth Godin
+- "Trust and influence now lie more with individuals than they do with institutions" -"Who can you trust?" Rachel Botsman
+- Statista
+- "It is projected that in 2027, 86.5 million people will be freelancing in the United States and will make up 50.9 percent of the total U.S. workforce." <footnote content = https://www.statista.com/statistics/921593/gig-economy-number-of-freelancers-us/>
+
+## A few stories
+
+- 25 hours of user feedback in June
+- Here are a few snippets
+
+## User Feedback 1
+
+- silver dash: already turned down dollars for his Shiny app. Why? There is no way to monetize it (https://exploringfinance.shinyapps.io/goldsilver/). Retail getting more sophisticated. 
+- the crypto and defi expert - and Shiny dev. This community wants to eliminate the middle man and trust the research. 
+- GC the academic. Text books as dynamic documents with updating data would change the game.
+- Two commodities traders and trainerpreneurs of aspiring traders: include zoom plugin and run dynamic content with live code. This is a super premium service - a real life project with two Pros. No other platform offers this. Direct lead in to quant recruiting *recurring theme
+- The Canadian: dream is a webpage, where the user chooses reports and the data updates. He will charge $15k for this
+
+## User Feedback 2
+
+- R conf prof a platform whose time has come
+- R conf hedgie the next evolution of data storytelling and a great resource for conferences
+- The data and retail guru - next step in decentralized finance
+-  make textbooks 100X better and 5X cheaper
+- The backtester - built a backtest framework and tried to build a business, there was no community for paid work
+- Open fin enthusiast research -> data -> code -> apps
+
+## Recurrent Themes
+
+- Reproducibility lends trust these days
+- People are tired of trust me I'm from huge a company or a big university
+- A better skills match freelance platform
+- Quality is king
+- Community compounds: attract creators, attract more readers
+
+## Revenue Model
+
+- For each creator, the platform keeps 20%
+- We all grow together
+- Each creator, with 1000 subscribers, \$10 per month ==  \$24k
+- 3-Year Goal: 500 creators, avg'ing \$120k per year = \$10mm ARR
+- 5-Year Goal: 1000 creators, avg'ing \$120k per year = \$25mm ARR
+- 10-Year Goal: 4000 creators, avg'ing \$120k per year = \$96mm ARR
+
+## Revenue Chart
+
+```{r, echo = F}
+
+tibble(
+  creators    = c(10,       50,     500,        1000,         4000),
+  subscribers = c(100,      500,     1000,       1000,         1000),
+  time         = c("Alpha", "Beta", "Years 1-2", "Years 3-4", "Years 5-10"),
+   revenue = creators * subscribers * 120 * .2
+)  %>% 
+  ggplot(aes(x = as.factor(creators), y = revenue, text = time)) +
+  geom_col(fill = "steelblue", width = .5) +
+  ggrepel::geom_label_repel(aes(label = time), nudge_y = 50, direction = "y") +
+  scale_y_continuous(label = scales::dollar, breaks = scales::pretty_breaks(n = 10)) +
+  labs(title = "Revenue Model For Subscription Only", x = "Creators", y = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = .5))
+  
+```
+
+## Revenue Streams
+
+- Research Subscriptions 
+- Dynamic Textbooks
+- Data vendor partnerships
+- Conference papers
+- Marketplace of models, data, and templates
+
+## Back to the 3 pillars
+
+- Tech
+- Quality and Payment
+- Community
+
+## Tech Stack
+
+- Rmarkdown, Shiny, Distill and Blastula -> Quarto
+- Ghost as possible foundation with payment capability
+- Subscriber manager via smtp, and split paid v. free
+
+## Branding and Payment
+
+- Things coders don't want to handle
+- Just hard enough to discourage people
+
+## Community
+
+- RS has done huge things for R community. 
+- This is the next evolution for that community
+- It doesn't yet exist for Python - this is where slateX helps RS dominate that world too
+
+## Thoughts on How this Fits for RStudio
+
+- Revenue
+- Uncorrelated with enterprise - a diversifier
+- Win Python with Community
+
+## Long Term Trends
+
+- Coders will rule the ~~day~~ decade
+- Population of R and Python coders growing fast
+- Data ubiquitous
+- Decentralization > Big Institutions
+- Explosion in assets and quant fields
+- Vincent, Vinovest, crypto, SPACs
+
+## Features
+
+- Ease of publishing
+- Integrate with twitter and linkedin
+- Flow to blog and website and email drips
+- All on top of Rmarkdown
+- RStudio Cloud, Rmd, Shinyapps.io, Distill - the pieces are there
+- Need some elegant glue
+- A payment and subscription layer
+
+
+## Challenges
+
+- Finding 1000 creators
+- Consistency
+- Long term thinking
+

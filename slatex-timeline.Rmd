@@ -1,0 +1,166 @@
+---
+title: "SlateX"
+author: "Jonathan Regenstein"
+date: "5/16/2021"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(scales)
+library(VennDiagram)
+```
+
+"no niche is too small if it's yours" -Seth Godin
+"Trust and influence now lie more with individuals than they do with institutions" -"Who can you trust?" Rachel Botsman
+
+### What is SlateX?
+
+SlateX is a platform where R and Python coders can monetize their research via subscription (Why is it called SlateX? It's a modern blank slate for creators; it's also a wink at LaTex which coders remember from grad school and will be happy to never use again).  The research is not the code itself, but rather the information in the research. For example, an R coder might want to establish a cadenced report on a sector of equities. SlateX enables the coder to write, code and run that report via an Rmarkdown-powered but slickly designed interface. The platform also allows the coder to distribute that report via a blend of paid and free email subscriptions, and enables publishing to a blog via Rmarkdown Distill for subscribers. Integration with Shiny/Dash (i.e. subscribers can access Shiny/Dash apps as well, and generate reports via those apps - the extent to which coders take advantage of these features is up to them) will also be included.  The consumers of theses reports and dashboards are not other coders looking for code snippets to integrate into systems (though we do envision a secondary market where creators can provide code to one another). Rather, in the case of financial research, the consumers are asset managers, strategists, professional investors and funds in general (that already pay for this kind of research) and retail investors with a tactical bent. 
+
+A fundamental belief underpinning SlateX is that research is moving to be decentralized, code based, data-driven and quantitative in nature. In other words, we believe and see a trend that research reports consumed by sophisticated hedge funds and tactical retail investors consumer (be they individuals or institutions) will become predominantly code and data-driven over the next 10 years. We also believe that trust in individuals is growing and trust in institutions is receding, in terms of sources of research.
+
+That 10 years time period is important to note. The goal of this platform is to enable 4,000 coders to have 1,000 paid subscribers over the next 10 years. That will result in approximately $96mm ARR, and the coders themselves earning close to \$100k per year. That's a large number and it will take time, but my vision for SlateX is on the 10-year time horizon. It also speaks to one of the guiding north star principles of SlateX: the success of the platform derives from the success of our creators. If we make them successful, if we enable R and Python coders to unleash their creativity and monetize their work, the platform will be monetarily strong.
+
+Success on this platform for our creators comes from the intersection of three areas: coding, writing and community If we were to Venn Diagram those three skills, SlateX would sit at the intersection.
+
+```{r, echo = FALSE}
+
+Coding <- c("SlateX","RStudio")
+Writing <- c("Substack","SlateX")
+Community <- c("SlateX","Linkedin/Twitter")
+
+x <- list(Coding=Coding , Writing=Writing, Community=Community)
+
+
+v0 <- venn.diagram( x, 
+                    filename=NULL, 
+                    fill = c("pink", "cornflowerblue", "lightgreen"),
+                    alpha = 0.70,
+                    col = "black")
+
+# grid.draw(v0)
+
+overlaps <- calculate.overlap(x)
+
+# extract indexes of overlaps from list names
+indx <- as.numeric(substr(names(overlaps), 2, 2))
+
+
+# labels start at position 7 in the list for Venn's with 3 circles
+for (i in 1:length(overlaps)){
+  v0[[6 + indx[i] ]]$label <- paste(overlaps[[i]], collapse = "\n") 
+}
+
+
+grid.newpage()
+grid.draw(v0) 
+```
+
+### Roadmap
+
+The individual technology components to bring SlateX to life already substantially exist, and most of the pieces have been built as open source packages or products by RStudio or developers in your ecosystem - but no one has put them together with an elegant work flow and added a subscription component. Rmarkdown, Shiny, Distill and Blastula accomplish the majority of the feature set for both R and Python coders. SlateX needs to glue them together into a coherent platform that includes paid subscription management - not trivial work, but not software engineering from scratch.  We can also conceptualize this from the standpoint of RStudio Connect - a coder can currently use Connect to host a Shiny app, host a scheduled parameterized report or a model.  SlateX allows that coder to set up a subscription to these assets, as well as publish the reports to a website or blog - without hosting Connect on a server of course. 
+
+It's important to note that SlateX is very different from other businesses being built by RStudio, which I believe is the ethos behind the product founder model.  The scale of the technology is vastly different.  For SlateX, a successful alpha launch is 10 coders using the technology with efficacy.  Beta is 100 coders. General Availability is when we aim for 500 coders in years 2-3, and 5000 coders by year 10.  The monetizaton comes from helping those coders build their audience of subscribers.  This is different from RStudio's other products, which are meant for hundreds of thousands to millions of coders. As a result, the timing of alpha, beta and GA periods can be vastly shorter and less costly. They can also be more flexible and exploratory of product market fit - where the market is defined by consumers of the research and not the coders themselves.
+
+### Alpha, Beta, GA Timeline
+
+An alpha product for the first 10 coders (the first of which will be me, and then other nine I will recruit from my network based on technical and brand building skills) is a maximum three-month build.  That is a worst-case-drop-dead scenario and it can be accomplished with one talented software engineer.  
+
+Minimum Viable Features
+
+    + Coder creates account on SlateX (similar to Shinyapps.io)
+    + Coder creates a profile
+    + Coder creates a report by uploading an Rmd file or pasting in contents from an Rmd file
+    + Coder can upload contacts of subscribers or potential subscribers
+    + Coder can publish report to a distill site
+    + Coder can send report to subscribers, post linkedin, post to twitter
+    + Coder can use blastula backend to choose which visualizations to include in posts and emails
+    + Viewer can click "subscribe" in the report and be added to distro list as paid or free
+    + Coder can choose paid versus free content (generally a monthly free and weekly paid report)
+    + Coder can set up payment via Stripe or similar
+    + The distribution list is responsive by paid or free viewer
+    + Integrate with Shinyapps
+
+A large portion of SlateX's value proposition is in helping coders build their audience and their brand - through social media hooks on the platform, best practice prompts and techniques, other media like podcasts, and a halo effect from the platform itself. That is, as we cultivate quality coders and creators and help them build content and community, other coders and creators will want to join the platform to benefit from the community  RStudio has a very valuable community and social media presence that would be invaluable to SlateX - and this is just as crucial as the engineering of the platform for our creators.
+
+After the alpha stage for 10 coders, we move to a beta stage for 100 new coders. These new coders will be recruited but we can also open up for 'applications'. 
+
+This should be a six-month stage that involves tightening and beautifying the onboarding process for new coders, and honing in on the most effective branding tools for the coders. The team would need to bring on a UX engineer during this stage and possibly product and community managers.  In an ideal world, one or two of those first 10 coders will also develop into a candidate to help build the platform as part of operations, content control or marketing. 
+
+After 3 months of alpha and 6 months of beta, we will have 110 onboarded coders, not all of whom will remain of course, but we will have the experience with 110 coders and can start to estimate attrition rates. 
+
+We will need another three months to get to GA, when we seek to onboard 500 coders over the course of the following 12 months. That is, alpha and beta run for 9 months total, another 3 months to get to GA, then 12 months of GA to onboard 400 new coders and another 12 months to build their audience. For GA the team will need to expand to include an operations lead and possibly a marketing lead as well. For the first 100 coders, I will be the operations and marketing lead, for better or worse - though we can agree to change that if that workload gets to where we are sacrificing quality for leanness. 
+
+### Revenue
+
+The most straightforward path to revenue targets is to for SlateX to retain 20% of the revenue generated by our creators. The goal for the first two years in GA is 500 coders, with 1000 subscribers at $10 per month, which equates to \$12mm ARR for the platform. That is . The goal in years 3-4 of GA is to double that to \$24mm and the goal in years 5-10 is 4x that to \$96mm. This aligns our incentives with those of our creators. We only succeed if they do.
+
+Here's a small chart on the revenue goals.
+
+```{r, echo = F}
+tibble(
+  creators    = c(10,       100,     500,        1000,         4000),
+  subscribers = c(1000,      1000,     1000,       1000,         1000),
+  time         = c("Alpha", "Beta", "Years 1-2", "Years 3-4", "Years 5-10"),
+   revenue = creators * subscribers * 120 * .2
+) %>% 
+  ggplot(aes(x = as.factor(creators), y = revenue, text = time)) +
+  geom_col(fill = "steelblue", width = .5) +
+  ggrepel::geom_label_repel(aes(label = time), nudge_y = 50, direction = "y") +
+  scale_y_continuous(label = scales::dollar, breaks = scales::pretty_breaks(n = 10)) +
+  labs(title = "Revenue Model", x = "Creators", y = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = .5))
+```
+
+There are several additional revenue streams to supplement this model: 
+- institutional sales of research
+- marketplace for different data products like engineered data, algorithms, dashboards, research templates
+- live coding, specialized webinars that are interactive research streams
+- data vendors 
+
+
+## JJ Thoughts
+
+Quarto.org is the multilingual platform and shiny integration is in the works. This his focus for next few years. Ghost.org is a launch your own substack, open source platform that we can build on top of. JJ also mentioned that distill engineers have opined on the sustainability of self-publishing (via subscription).
+
+### The world in ten years
+
+- explosion in financial assets and markets
+- R and Python coders over 3 million
+- research data and code driven, trust derived from reprod not institutions
+- creator economy viable living; possibly 50% freelancing
+- more remote work, enabling more workers as also creator
+- democratization of data v-a-v institutions and individuals
+- decentralization of research and expertise
+
+
+Over the next 10 years, the job market and economics for data scientists will undergo a radical shift, as individuals gain the ability to do research on par with institutions and creator platforms give them the ability to monetize that research. Similar to journalists on substack, coders will be empowered and unleashed to sell their work directly to consumers, building wealth and personal brands along the way. To the extent that data scientists also grow at institutions, they will increasingly work remotely at least a few days a week. 
+
+
+### La Proposal Finale
+
+- Layout the platform: reproducible research on crypto, equities and macro
+- Data secured
+- The payment and subscription management is the needed tech to get started
+- In the beginning, I will manually review all for reproducibility
+- Proposal to SC: 
+- Has a company been incubated and founded at the lab
+- SC as co-founder and chief ds officer or whatever he wants
+- incubate it at the lab, first $100k of book revenues go to the company
+- plan is raise $300k total
+- if lab is a no go, maybe the ATDC or some other space
+
+Two paths: 
+1) just do the book together, podcast if Sudheer wants
+
+2) use book to fund slatex and let SC accrue equity, plus 'incubate' at the lab as first startup. 
+
+either one is fine with me.
+
+other: southern btc conference in 22
+- 
